@@ -15,8 +15,10 @@ public class Visual {
     private String keyString = "M2Y2ZDYzMmM3NWQzOTkwMDNmZTBmNTA2MmE3NTZkNjk=";
     private String ivString = "M2ZlNDRhOWJiMzMyNmRiYzNmZGYwNzcxNDU3YTFkMzQ=";
     private AESVisualizerGUI visualizerGUI;
+    private String processName;
 
-    public Visual() {
+    public Visual(String processName) {
+        this.processName = processName;
         initVisual();
     }
 
@@ -27,7 +29,7 @@ public class Visual {
         this.enc = new LinkedList<>();
         this.aes.setKey(key);
         this.aes.setIV(iv);
-        this.visualizerGUI = new AESVisualizerGUI(this.enc,);
+        this.visualizerGUI = new AESVisualizerGUI(this.enc, this.processName);
     }
 
     public byte[] getByteStream(String text) {
@@ -57,11 +59,11 @@ public class Visual {
 
     public static void main(String[] args) {
 
-        Visual v = new Visual();
+        Visual v = new Visual("encryption");
         byte[] enc = v.encrypt("Hello");
         System.out.println("Enc: " + Base64.getEncoder().encodeToString(enc));
 
-        Visual decrypt = new Visual();
+        Visual decrypt = new Visual("Decryption");
         byte[] newText = decrypt.encrypt("Null Value");
 
         // LinkedList<stateRecord> enc = new LinkedList<>();
