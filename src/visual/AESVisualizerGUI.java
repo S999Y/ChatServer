@@ -287,15 +287,28 @@ public class AESVisualizerGUI extends JFrame {
         progressBar.setForeground(new Color(76, 175, 80));
 
         // Get final encrypted text
-        stateRecord finalStep = steps.getLast(); // Or steps.get(steps.size() - 1)
+        // stateRecord finalStep = steps.getLast();
+        stateRecord finalStep = steps.get(steps.size() - 1);
         String encryptedText = finalStep.getEncryptedText();
 
-        // Show it in a dialog box
-        JOptionPane.showMessageDialog(
-                this,
-                "AES Encryption Complete!\nEncrypted Text:\n" + encryptedText,
-                "Encryption Finished",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (this.processName.equals("Encryption")) {
+            // Show it in a dialog box
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Encrypted Text:\n" + encryptedText,
+                    "Encryption Finished",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // show the plain text
+            stateRecord lastDec = steps.get(steps.size() - 1);
+            String decrypted = lastDec.getPlainText();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Plain Text:\n" + decrypted,
+                    "Encryption Finished",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }
 

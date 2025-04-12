@@ -16,6 +16,8 @@ public class AES {
     private int actual;
     private LinkedList<stateRecord> steps = new LinkedList<>();
     private LinkedList<stateRecord> decryption = new LinkedList<>();
+    private stateRecord dec;
+    private stateRecord step;
 
     // number of chars (32 bit)
     private static int Nb = 4;
@@ -175,39 +177,39 @@ public class AES {
             }
         }
         actual = 0;
-        stateRecord step = new stateRecord("Round: " + actual);
-        step.setSubBytesMatrix(deepCopy(in));
+        this.step = new stateRecord("Round: " + actual);
+        this.step.setSubBytesMatrix(deepCopy(in));
 
         addRoundKey(out, actual);
-        step.setAddRoundKeyMatrix(deepCopy(out));
-        steps.add(step);
+        this.step.setAddRoundKeyMatrix(deepCopy(out));
+        this.steps.add(step);
 
         for (actual = 1; actual < Nr; actual++) {
 
-            step = new stateRecord("Round: " + actual);
+            this.step = new stateRecord("Round: " + actual);
             subBytes(out);
-            step.setSubBytesMatrix(deepCopy(out));
+            this.step.setSubBytesMatrix(deepCopy(out));
             shiftRows(out);
-            step.setShiftRowsMatrix(deepCopy(out));
+            this.step.setShiftRowsMatrix(deepCopy(out));
             mixColumns(out);
-            step.setMixColumnsMatrix(deepCopy(out));
+            this.step.setMixColumnsMatrix(deepCopy(out));
             addRoundKey(out, actual);
-            step.setAddRoundKeyMatrix(deepCopy(out));
+            this.step.setAddRoundKeyMatrix(deepCopy(out));
 
-            steps.add(step);
+            this.steps.add(this.step);
         }
         // subBytes(out);
         // shiftRows(out);
         // addRoundKey(out, actual);
-        step = new stateRecord("Fianl Round.");
+        this.step = new stateRecord("Fianl Round.");
         subBytes(out);
-        step.setSubBytesMatrix(deepCopy(out));
+        this.step.setSubBytesMatrix(deepCopy(out));
         shiftRows(out);
-        step.setShiftRowsMatrix(deepCopy(out));
+        this.step.setShiftRowsMatrix(deepCopy(out));
         addRoundKey(out, actual);
-        step.setAddRoundKeyMatrix(deepCopy(out));
-        step.setEncryptedText(matrixToHexString(out));
-        steps.add(step);
+        this.step.setAddRoundKeyMatrix(deepCopy(out));
+        this.step.setEncryptedText(matrixToHexString(out));
+        this.steps.add(step);
         return out;
     }
 
@@ -218,34 +220,34 @@ public class AES {
             }
         }
         actual = Nr;
-        stateRecord dec = new stateRecord("Round: " + actual);
-        dec.setSubBytesMatrix(deepCopy(in));
+        this.dec = new stateRecord("Round: " + actual);
+        this.dec.setSubBytesMatrix(deepCopy(in));
 
         addRoundKey(out, actual);
-        dec.setAddRoundKeyMatrix(deepCopy(out));
+        this.dec.setAddRoundKeyMatrix(deepCopy(out));
         decryption.add(dec);
 
         for (actual = Nr - 1; actual > 0; actual--) {
-            dec = new stateRecord("Round: " + actual);
+            this.dec = new stateRecord("Round: " + actual);
             invShiftRows(out);
-            dec.setShiftRowsMatrix(deepCopy(out));
+            this.dec.setShiftRowsMatrix(deepCopy(out));
 
             invSubBytes(out);
-            dec.setSubBytesMatrix(deepCopy(out));
+            this.dec.setSubBytesMatrix(deepCopy(out));
             addRoundKey(out, actual);
-            dec.setAddRoundKeyMatrix(deepCopy(out));
+            this.dec.setAddRoundKeyMatrix(deepCopy(out));
             invMixColumnas(out);
-            dec.setMixColumnsMatrix(deepCopy(out));
-            decryption.add(dec);
+            this.dec.setMixColumnsMatrix(deepCopy(out));
+            this.decryption.add(dec);
         }
-        dec = new stateRecord("Fianl Round.");
+        this.dec = new stateRecord("Fianl Round.");
         invShiftRows(out);
-        dec.setShiftRowsMatrix(deepCopy(out));
+        this.dec.setShiftRowsMatrix(deepCopy(out));
         invSubBytes(out);
-        dec.setSubBytesMatrix(deepCopy(out));
+        this.dec.setSubBytesMatrix(deepCopy(out));
         addRoundKey(out, actual);
-        dec.setEncryptedText(matrixToHexString(out));
-        decryption.add(dec);
+        this.dec.setEncryptedText(matrixToHexString(out));
+        this.decryption.add(this.dec);
 
         return out;
 
@@ -535,6 +537,9 @@ public class AES {
                 e.printStackTrace();
             }
         }
+        this.step = new stateRecord("Encrypted");
+        this.step.setEncryptedText(Base64.getEncoder().encodeToString(out.toByteArray()));
+        this.steps.add(step);
         return out.toByteArray();
     }
 
@@ -554,6 +559,9 @@ public class AES {
                 e.printStackTrace();
             }
         }
+        this.dec = new stateRecord("Decrypted");
+        this.dec.setPlainText(new String(out.toByteArray()));
+        this.decryption.add(dec);
         return out.toByteArray();
     }
 

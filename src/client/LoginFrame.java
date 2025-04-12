@@ -77,7 +77,8 @@ public class LoginFrame extends JFrame {
         gbc.gridx = 1;
         serverField = createStyledTextField(15);
         serverField.setText(serverName);
-        serverField.setEditable(false);
+        // change this to true for user input
+        serverField.setEditable(true);
         serverField.setBackground(new Color(240, 240, 240));
         panel.add(serverField, gbc);
 
