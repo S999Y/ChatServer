@@ -8,9 +8,6 @@ import java.util.LinkedList;
 import test.stateRecord;
 import visual.AesSteps;
 
-/**
- * Created by tehcpu on 11/12/17.
- */
 public class AES {
     // current round index
     private int actual;
