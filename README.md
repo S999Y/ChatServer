@@ -1,4 +1,4 @@
-## Getting Started
+## Java Chat Application
 
 AES-Encrypted Java Chat Application:
 This project is a secure, real-time chat application developed in Java using Swing for the graphical user interface. It enables multiple users to communicate over a local server (localhost) with robust AES-256 encryption securing every message. Each message sent is encrypted before transmission and decrypted upon receipt, ensuring privacy and data protection.
